@@ -15,8 +15,14 @@ build:
 	docker tag $(docker_image_repository):$(project_version) $(docker_image_repository):latest
 
 run:
-	docker run -d -p 2222:22 toolchain-server
+	docker run -d -p 2222:22 --name $(project_name) $(docker_image_repository):$(project_version) 
+
+stop:
+	docker stop $(project_name)
 
 deploy:
 	docker push $(docker_image_repository):$(project_version)
 	docker push $(docker_image_repository):latest
+
+clean: stop
+	docker rm --force $(project_name)
